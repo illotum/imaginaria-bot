@@ -30,12 +30,12 @@ module.exports = (robot) ->
           feed.init()
           count = msg.match[1] || 5
           items = feed.getItems(0, count)
-          msg.send item.getTitle() + ": " + item.getPermalink() for item in items
+          msg.send item.getTitle() + ": " + item.getPermalink() + " [" + item.getCategories() + "]" for item in items
         catch e
           console.log(e)
           msg.send "Something's gone awry"
 
-  robot.hear /блоги(\.топ|\[\d+\])/i, (msg) ->
+  robot.hear /блоги(\.топ|\(\d+\))/i, (msg) ->
      msg.http(hnFeedUrl).get() (err, res, body) ->
        if res.statusCode is not 200
          msg.send "Something's gone awry"
@@ -53,7 +53,7 @@ module.exports = (robot) ->
            idx = (Number) msg.match[0].replace(/[^0-9]/g, '')
          try
            item = feed.getItems()[idx]
-           msg.send item.getTitle() + ": " + item.getPermalink() + " (" + item.getComments()?.html + ")"
+           msg.send item.getTitle() + ": " + item.getPermalink() + " [" + item.getCategories() + "]"
          catch e
            console.log(e)
            msg.send "Something's gone awry"
