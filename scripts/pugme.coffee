@@ -8,24 +8,24 @@
 #   None
 #
 # Commands:
-#   hubot pug me - Receive a pug
-#   hubot pug bomb N - get N pugs
+#   hubot мопса мне - получить мопса
+#   hubot N мопсов мне - получить N мопсов
 
 module.exports = (robot) ->
 
-  robot.respond /pug me/i, (msg) ->
+  robot.respond /(?:pug|мопса)(?: me| мне)?/i, (msg) ->
     msg.http("http://pugme.herokuapp.com/random")
       .get() (err, res, body) ->
         msg.send JSON.parse(body).pug
 
-  robot.respond /pug bomb( (\d+))?/i, (msg) ->
+  robot.respond /( (\d+))?(?:pug|мопсов)(?: me| мне)?/i, (msg) ->
     count = msg.match[2] || 5
     msg.http("http://pugme.herokuapp.com/bomb?count=" + count)
       .get() (err, res, body) ->
         msg.send pug for pug in JSON.parse(body).pugs
 
-  robot.respond /how many pugs are there/i, (msg) ->
+  robot.respond /(how many pugs are there|сколько там тех мопсов)/i, (msg) ->
     msg.http("http://pugme.herokuapp.com/count")
       .get() (err, res, body) ->
-        msg.send "There are #{JSON.parse(body).pug_count} pugs."
+        msg.send "Я насчитала #{JSON.parse(body).pug_count} мопсов."
 
