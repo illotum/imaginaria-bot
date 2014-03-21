@@ -2,8 +2,8 @@
 #   Generates help commands for Hubot.
 #
 # Commands:
-#   hubot help - Displays all of the help commands that Hubot knows about.
-#   hubot help <query> - Displays all help commands that match <query>.
+#   hubot справка - Displays all of the help commands that Hubot knows about.
+#   hubot справка <query> - Displays all help commands that match <query>.
 #
 # URLS:
 #   /hubot/help
@@ -53,7 +53,7 @@ helpContents = (name, commands) ->
   """
 
 module.exports = (robot) ->
-  robot.respond /help\s*(.*)?$/i, (msg) ->
+  robot.respond /справка\s*(.*)?$/i, (msg) ->
     cmds = robot.helpCommands()
     filter = msg.match[1]
 
@@ -61,7 +61,7 @@ module.exports = (robot) ->
       cmds = cmds.filter (cmd) ->
         cmd.match new RegExp(filter, 'i')
       if cmds.length == 0
-        msg.send "No available commands match #{filter}"
+        msg.send "Нет команды совпадающей с #{filter}"
         return
 
     prefix = robot.alias or robot.name
