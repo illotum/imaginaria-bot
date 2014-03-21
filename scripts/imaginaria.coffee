@@ -8,18 +8,18 @@
 #   None
 #
 # Commands:
-#   топ <N> имки - get the top N items on hacker news (or your favorite RSS feed)
+#   топ <N> имки - получить топ <N> статей с имаджинарии
 #
 # Author:
 #   illotum
 
 NodePie = require("nodepie")
 
-hnFeedUrl = "http://imaginaria.ru/rss"
+FeedUrl = "http://imaginaria.ru/rss"
 
 module.exports = (robot) ->
-  robot.hear /топ[ ]?(\d+)? имки/i, (msg) ->
-    msg.http(hnFeedUrl).get() (err, res, body) ->
+  robot.respond /топ( \d+)? имки/i, (msg) ->
+    msg.http(FeedUrl).get() (err, res, body) ->
       if res.statusCode is not 200
         msg.send "Something's gone awry"
       else
@@ -28,7 +28,7 @@ module.exports = (robot) ->
           feed.init()
           count = msg.match[1] || 5
           items = feed.getItems(0, count)
-          msg.send item.getTitle() + ": " + item.getPermalink() + " [" + item.getCategories() + "]" for item in items
+          msg.send "<" + item.getPermalink() + "|" + item.getTitle() + "> [" + item.getCategories() + "]" for item in items
         catch e
           console.log(e)
           msg.send "Something's gone awry"
