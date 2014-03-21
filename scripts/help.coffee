@@ -2,8 +2,8 @@
 #   Generates help commands for Hubot.
 #
 # Commands:
-#   hubot справка - Displays all of the help commands that Hubot knows about.
-#   hubot справка <query> - Displays all help commands that match <query>.
+#   hubot справка - Показывает все известные боту команды.
+#   hubot справка <query> - Показывает все команды совпадающие с <query>.
 #
 # URLS:
 #   /hubot/help
@@ -53,7 +53,7 @@ helpContents = (name, commands) ->
   """
 
 module.exports = (robot) ->
-  robot.respond /справка\s*(.*)?$/i, (msg) ->
+  robot.respond /(?:справка|help)\s*(.*)?$/i, (msg) ->
     cmds = robot.helpCommands()
     filter = msg.match[1]
 
