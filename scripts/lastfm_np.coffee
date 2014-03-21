@@ -16,15 +16,13 @@
 #   guilleiguaran
 #   sn0opy
 
-getSong = (msg, usr) ->
-  user = usr ? msg.match[1]
+getSong = (msg, user) ->
   apiKey = process.env.HUBOT_LASTFM_APIKEY
   msg.http('http://ws.audioscrobbler.com/2.0/?')
     .query(method: 'user.getrecenttracks', user: user, api_key: apiKey, format: 'json')
     .get() (err, res, body) ->
       results = JSON.parse(body)
       if results.error
-        msg.send user
         msg.send results.message
         return
       song = results.recenttracks.track[0]
@@ -32,6 +30,6 @@ getSong = (msg, usr) ->
 
 module.exports = (robot) ->
   robot.respond /что слушает (.*)/i, (msg) ->
-    getSong(msg)
+    getSong(msg, msg.match[1])
   robot.respond /что я слушаю/i, (msg) ->
     getSong(msg, msg.message.user.name)

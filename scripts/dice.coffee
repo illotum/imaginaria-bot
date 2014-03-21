@@ -8,23 +8,23 @@
 #   None
 #
 # Commands:
-#   =<x>d<y>+<z> - бросить <x> <y>-гранников и добавить <z>
+#   =<x>d<y>+<z> - бросить <x> <y>-гранников и добавить <z>. ПОЛОМАНО
 #
 # Author:
 #   ab9
 
 module.exports = (robot) ->
-  robot.respond /roll (die|one)/i, (msg) ->
-    msg.reply report [rollOne(6)]
-  robot.respond /roll dice/i, (msg) ->
-    msg.reply report roll 2, 6
-  robot.respond /roll (\d+)d(\d+)/i, (msg) ->
+  robot.hear /[=](\d+)d(\d+)([-+*\/])(\d+)/i, (msg) ->
     dice = parseInt msg.match[1]
     sides = parseInt msg.match[2]
-    answer = if sides < 1
-      "I don't know how to roll a zero-sided die."
+    op = parseInt msg.match[3]
+    mod = parseInt msg.match[4]
+    answer = if sides < 2
+      "Сложно покатить что-то одностороннее."
     else if dice > 100
-      "I'm not going to roll more than 100 dice for you."
+      "Я не собираюсь бросать больше ста костей."
+    else if dice < 1
+      "Нечего бросать."
     else
       report roll dice, sides
     msg.reply answer
@@ -33,14 +33,14 @@ report = (results) ->
   if results?
     switch results.length
       when 0
-        "I didn't roll any dice."
+        "На столе пусто."
       when 1
-        "I rolled a #{results[0]}."
+        "Я выбросила #{results[0]}."
       else
         total = results.reduce (x, y) -> x + y
         finalComma = if (results.length > 2) then "," else ""
         last = results.pop()
-        "I rolled #{results.join(", ")}#{finalComma} and #{last}, making #{total}."
+        "Я выбросила #{results.join(", ")}#{finalComma} и #{last}, в сумме #{total}."
 
 roll = (dice, sides) ->
   rollOne(sides) for i in [0...dice]
