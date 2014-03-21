@@ -30,6 +30,7 @@ getSong = (msg, user) ->
 
 module.exports = (robot) ->
   robot.respond /что слушает (.*)/i, (msg) ->
-    getSong(msg, msg.match[1])
+    name = msg.match[1].trim()
+    getSong(msg, name)
   robot.respond /что я слушаю/i, (msg) ->
     getSong(msg, msg.message.user.name)
