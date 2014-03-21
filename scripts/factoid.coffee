@@ -30,7 +30,7 @@ class Factoids
 
   add: (key, val) ->
     if @cache[key]
-      "Да, я помню."
+      "Я лучше знаю."
     else
       this.setFactoid key, val
 
