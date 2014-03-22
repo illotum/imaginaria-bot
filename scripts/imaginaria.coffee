@@ -28,8 +28,7 @@ module.exports = (robot) ->
           feed.init()
           count = msg.match[1] || 5
           items = feed.getItems(0, count)
-          msg.send item.getTitle() + ": " + item.getPermalink() + " [" + item.getCategories() + "]" for item in items
-          msg.send "<"+item.getPermalink()+"|"+item.getTitle()+">" + " [" + item.getCategories() + "]" for item in items
+          msg.send item.getTitle() + " [" + item.getCategories() + "] : " + item.getPermalink() +  for item in items
         catch e
           console.log(e)
           msg.send "Something's gone awry"
