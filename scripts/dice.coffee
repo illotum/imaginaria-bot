@@ -14,7 +14,7 @@
 #   ab9
 
 module.exports = (robot) ->
-  robot.hear /[=](\d+)d(\d+)([-+*\/])(\d+)/i, (msg) ->
+  robot.hear /\=(\d+)d(\d+)([-+*\/])(\d+)/i, (msg) ->
     dice = parseInt msg.match[1]
     sides = parseInt msg.match[2]
     op = parseInt msg.match[3]
