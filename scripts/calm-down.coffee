@@ -16,12 +16,13 @@ module.exports = (robot) ->
 
   robot.respond /manatee|calm( me)?/i, (msg) -> msg.send manatee()
 
-  robot.hear /calm down|simmer down|that escalated quickly|успокойся|не кипятись/i, (msg) ->
+  robot.hear /calm down|simmer down|that escalated quickly|успокойся|не кипятись|угомонись|остынь/i, (msg) ->
     msg.send manatee()
 
   unless process.env.HUBOT_LESS_MANATEES
     robot.hear ///
       (\b([A-Z]{2,}\s+)([A-Z]{2,})\b)|
       (\b[A-Z]{6,}\b)|
-      ([А-ЯЁ]{6,})
+      (\b([А-ЯЁ]{3,}\s+)([А-ЯЁ]{3,})\b)|
+      ([А-ЯЁ]{10,})
     ///, (msg) -> msg.send manatee()
