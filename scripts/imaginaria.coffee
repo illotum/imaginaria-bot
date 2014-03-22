@@ -32,3 +32,18 @@ module.exports = (robot) ->
         catch e
           console.log(e)
           msg.send "Something's gone awry"
+
+  robot.respond /последние( \d+)?(:? с)? имки/i, (msg) ->
+    msg.http(FeedUrl+"/new").get() (err, res, body) ->
+      if res.statusCode is not 200
+        msg.send "Something's gone awry"
+      else
+        feed = new NodePie(body)
+        try
+          feed.init()
+          count = msg.match[1] || 5
+          items = feed.getItems(0, count)
+          msg.send item.getTitle() + " [" + item.getCategories() + "] : " + item.getPermalink() for item in items
+        catch e
+          console.log(e)
+          msg.send "Something's gone awry"
