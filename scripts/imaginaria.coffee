@@ -2,13 +2,15 @@
 #  Imaginaria News
 #
 # Dependencies:
-#   "cheerio": "0.5.0"
+#   "cheerio": "0.13.1"
 #
 # Configuration:
 #   None
 #
 # Commands:
 #   hubot топ <N> имки - получить топ <N> статей с имаджинарии
+#   hubot новинки <N> имки - получить <N> новых статей с имаджинарии
+#   hubot <T> на имке - получить первых пять статей с имки по тегу <T>
 #
 # Author:
 #   illotum
