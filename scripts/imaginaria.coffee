@@ -2,7 +2,7 @@
 #  Imaginaria News
 #
 # Dependencies:
-#   "nodepie": "0.5.0"
+#   "cheerio": "0.5.0"
 #
 # Configuration:
 #   None
@@ -13,37 +13,45 @@
 # Author:
 #   illotum
 
-NodePie = require("nodepie")
+cheerio = require('cheerio')
 
-FeedUrl = "http://imaginaria.ru/rss"
+base = "http://imaginaria.ru/rss"
+
+getFeed = (msg, location, count, callback) ->
+  msg.http(location).get() (error,response, body) ->
+    return msg.send "Something went wrong..." if error
+    items = getItems body, count
+    callback items
+
+getItems = (body, count) ->
+  $ = cheerio.load(body, {ignoreWhitespace : true, xmlMode: true})
+  items = []
+  $('item').slice(0, count - 1).each (idx, item) ->
+    items.push
+      title: $(this).find('title').text()
+      link: $(this).find('link').text()
+      categories: []
+    $(this).find('category').each (idy, cat) ->
+      items[idx].categories.push $(this).text()
+  return items
 
 module.exports = (robot) ->
   robot.respond /топ( \d+)? имки/i, (msg) ->
-    msg.http(FeedUrl).get() (err, res, body) ->
-      if res.statusCode is not 200
-        msg.send "Something's gone awry"
-      else
-        feed = new NodePie(body)
-        try
-          feed.init()
-          count = msg.match[1] || 5
-          items = feed.getItems(0, count)
-          msg.send item.getTitle() + " [" + item.getCategories() + "] : " + item.getPermalink() for item in items
-        catch e
-          console.log(e)
-          msg.send "Something's gone awry"
+    location = base
+    count = msg.match[1] || 5
+    getFeed msg, location, count, (items) ->
+      msg.send ("\"#{i.title}\" /#{i.categories.join(', ')}/ #{i.link}" for i in items).join("\n")
 
-  robot.respond /последние( \d+)?(:? с)? имки/i, (msg) ->
-    msg.http(FeedUrl+"/new").get() (err, res, body) ->
-      if res.statusCode is not 200
-        msg.send "Something's gone awry"
-      else
-        feed = new NodePie(body)
-        try
-          feed.init()
-          count = msg.match[1] || 5
-          items = feed.getItems(0, count)
-          msg.send item.getTitle() + " [" + item.getCategories() + "] : " + item.getPermalink() for item in items
-        catch e
-          console.log(e)
-          msg.send "Something's gone awry"
+  robot.respond /новинки( \d+)? имки/i, (msg) ->
+    location = base + "/new"
+    count = msg.match[1] || 5
+    now = new Date
+    getFeed msg, location, count, (items) ->
+      msg.send ("\"#{i.title}\" /#{i.categories.join(', ')}/ #{i.link}" for i in items).join("\n")
+
+  robot.respond /(.+) на имке/i, (msg) ->
+    location = base + "/tag/" + msg.match[1]
+    count = 5
+    now = new Date
+    getFeed msg, location, count, (items) ->
+      msg.send ("\"#{i.title}\" /#{i.categories.join(', ')}/ #{i.link}" for i in items).join("\n")
