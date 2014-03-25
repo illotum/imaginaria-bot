@@ -16,7 +16,7 @@
 PEG = require 'pegjs'
 
 module.exports = (robot) ->
-  robot.hear /\=([0-9A-Za-z().+*\/-]+)/i, (msg) ->
+  robot.hear /\= *([0-9A-Za-z().+*\/-]+)/i, (msg) ->
     msg.reply parser.parse msg.match[1]
 
 
