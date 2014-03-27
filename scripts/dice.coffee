@@ -1,5 +1,5 @@
 # Description:
-#   Allows Hubot to roll dice usgin Invisible Castle grammar
+#   Allows Hubot to roll dice
 #
 # Dependencies:
 #   None
