@@ -18,6 +18,8 @@ module.exports = (robot) ->
     response = 'ಠ_ಠ'
 
     name = msg.match[1].trim()
-    response += " @" + name if name != ""
-
-    msg.send(response)
+    response +=
+    if name == "я"
+      msg.reply response
+    else
+      msg.send response + " @" + name if name != ""
