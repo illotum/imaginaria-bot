@@ -16,7 +16,6 @@
 #   illotum
 
 cheerio = require('cheerio')
-
 base = "http://imaginaria.ru/rss"
 
 getFeed = (msg, location, count, callback) ->
