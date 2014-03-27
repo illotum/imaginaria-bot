@@ -34,7 +34,7 @@ module.exports = (robot) ->
   robot.respond /daily deal|сделка дня/i, (msg) ->
     getItems msg, location, parseDeals, 1, (deal) ->
       if deal.url
-        msg.send "#{deal.discount} // #{deal.url} (#{deal.image})"
+        msg.send "#{deal.discount} // #{deal.image} // #{deal.url}"
       else
         msg.send "Сегодня сделки дня нет"
 
